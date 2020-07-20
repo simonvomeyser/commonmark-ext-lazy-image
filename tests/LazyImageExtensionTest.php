@@ -49,6 +49,36 @@ class LazyImageExtensionTest extends TestCase {
         $this->assertStringContainsString('<img src="" alt="alt text" loading="lazy" />', $html);
     }
 
+    public function testThatTheDataSrcBeDefined()
+    {
+        $environment = Environment::createCommonMarkEnvironment();
+
+        $environment->addExtension(new LazyImageExtension());
+
+        $imageMarkdown = '![alt text](/path/to/image.jpg)';
+
+        $html = (new CommonMarkConverter([
+            'lazy_image' => ['data_attribute' => 'src']
+        ], $environment))->convertToHtml($imageMarkdown);
+
+        $this->assertStringContainsString('data-src="/path/to/image.jpg"', $html);
+    }
+
+    public function testThatTheClassCanBeAdded()
+    {
+        $environment = Environment::createCommonMarkEnvironment();
+
+        $environment->addExtension(new LazyImageExtension());
+
+        $imageMarkdown = '![alt text](/path/to/image.jpg)';
+
+        $html = (new CommonMarkConverter([
+            'lazy_image' => ['html_class' => 'lazy-loading-class']
+        ], $environment))->convertToHtml($imageMarkdown);
+
+        $this->assertStringContainsString('class="lazy-loading-class"', $html);
+    }
+
 
     /**
      * @param ConfigurableEnvironmentInterface $environment

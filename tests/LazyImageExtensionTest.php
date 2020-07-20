@@ -3,7 +3,6 @@
 use League\CommonMark\CommonMarkConverter;
 use League\CommonMark\ConfigurableEnvironmentInterface;
 use League\CommonMark\Environment;
-use League\CommonMark\EnvironmentAwareInterface as EnvironmentAwareInterfaceAlias;
 use PHPUnit\Framework\TestCase;
 use SimonVomEyser\CommonMarkExtension\LazyImageExtension;
 
@@ -79,6 +78,24 @@ class LazyImageExtensionTest extends TestCase {
         $this->assertStringContainsString('class="lazy-loading-class"', $html);
     }
 
+    public function testLozadLibraryConfigurationAsExample()
+    {
+        $environment = Environment::createCommonMarkEnvironment();
+
+        $environment->addExtension(new LazyImageExtension());
+
+        $imageMarkdown = '![alt text](/path/to/image.jpg)';
+
+        $html = (new CommonMarkConverter([
+            'lazy_image' => [
+                'strip_src' => true,
+                'html_class' => 'lozad',
+                'data_attribute' => 'src',
+            ]
+        ], $environment))->convertToHtml($imageMarkdown);
+
+        $this->assertStringContainsString('src="" alt="alt text" loading="lazy" data-src="/path/to/image.jpg" class="lozad"', $html);
+    }
 
     /**
      * @param ConfigurableEnvironmentInterface $environment

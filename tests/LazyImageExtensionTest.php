@@ -18,7 +18,7 @@ class LazyImageExtensionTest extends TestCase {
 
         $environment->addExtension(new LazyImageExtension());
 
-        $this->assertCount(2, $this->getImageRenderes($environment));
+        $this->assertCount(2, $this->getImageRenderers($environment));
     }
 
     public function testThatOnlyTheLazyAttributeIsAddedInDefaultConfig()
@@ -84,7 +84,7 @@ class LazyImageExtensionTest extends TestCase {
      * @param ConfigurableEnvironmentInterface $environment
      * @return array
      */
-    private function getImageRenderes(ConfigurableEnvironmentInterface $environment) {
+    private function getImageRenderers(ConfigurableEnvironmentInterface $environment) {
         return iterator_to_array($environment->getInlineRenderersForClass('League\CommonMark\Inline\Element\Image'));
     }
 }

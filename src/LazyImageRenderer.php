@@ -2,7 +2,6 @@
 
 namespace SimonVomEyser\CommonMarkExtension;
 
-use Faker\Provider\Image;
 use League\CommonMark\ConfigurableEnvironmentInterface;
 use League\CommonMark\HtmlElement;
 use League\CommonMark\Inline\Renderer\ImageRenderer;

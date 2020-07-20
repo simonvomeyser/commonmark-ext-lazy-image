@@ -10,6 +10,7 @@ class LazyImageExtension implements ExtensionInterface
 {
     public function register(ConfigurableEnvironmentInterface $environment)
     {
-        $environment->addInlineRenderer('League\CommonMark\Inline\Element\Image', new LazyImageRenderer(new ImageRenderer()), 10);
+        $lazyImageRenderer = new LazyImageRenderer(new ImageRenderer(), $environment);
+        $environment->addInlineRenderer('League\CommonMark\Inline\Element\Image', $lazyImageRenderer, 10);
     }
 }

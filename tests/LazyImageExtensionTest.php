@@ -34,6 +34,22 @@ class LazyImageExtensionTest extends TestCase {
         $this->assertStringContainsString('<img src="/path/to/image.jpg" alt="alt text" loading="lazy" />', $html);
     }
 
+    public function testThatTheSrcCanBeStripped()
+    {
+        $environment = Environment::createCommonMarkEnvironment();
+
+        $environment->addExtension(new LazyImageExtension());
+
+        $converter = new CommonMarkConverter([
+            'lazy_image' => ['strip_src' => true]
+        ], $environment);
+
+        $html = $converter->convertToHtml('![alt text](/path/to/image.jpg)');
+
+        $this->assertStringContainsString('<img src="" alt="alt text" loading="lazy" />', $html);
+    }
+
+
     /**
      * @param ConfigurableEnvironmentInterface $environment
      * @return array

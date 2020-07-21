@@ -9,24 +9,26 @@ use SimonVomEyser\CommonMarkExtension\LazyImageExtension;
 /**
  * Class LazyImageExtensionTest
  */
-class LazyImageExtensionTest extends TestCase {
+class LazyImageExtensionTest extends TestCase
+{
+
+    protected $environment;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->environment = Environment::createCommonMarkEnvironment();
+        $this->environment->addExtension(new LazyImageExtension());
+    }
 
     public function testThatTheRendererIsAdded()
     {
-        $environment = Environment::createCommonMarkEnvironment();
-
-        $environment->addExtension(new LazyImageExtension());
-
-        $this->assertCount(2, $this->getImageRenderers($environment));
+        $this->assertCount(2, $this->getImageRenderers($this->environment));
     }
 
     public function testThatOnlyTheLazyAttributeIsAddedInDefaultConfig()
     {
-        $environment = Environment::createCommonMarkEnvironment();
-
-        $environment->addExtension(new LazyImageExtension());
-
-        $converter = new CommonMarkConverter([], $environment);
+        $converter = new CommonMarkConverter([], $this->environment);
 
         $html = $converter->convertToHtml('![alt text](/path/to/image.jpg)');
 
@@ -35,13 +37,9 @@ class LazyImageExtensionTest extends TestCase {
 
     public function testThatTheSrcCanBeStripped()
     {
-        $environment = Environment::createCommonMarkEnvironment();
-
-        $environment->addExtension(new LazyImageExtension());
-
         $converter = new CommonMarkConverter([
             'lazy_image' => ['strip_src' => true]
-        ], $environment);
+        ], $this->environment);
 
         $html = $converter->convertToHtml('![alt text](/path/to/image.jpg)');
 
@@ -50,39 +48,30 @@ class LazyImageExtensionTest extends TestCase {
 
     public function testThatTheDataSrcBeDefined()
     {
-        $environment = Environment::createCommonMarkEnvironment();
-
-        $environment->addExtension(new LazyImageExtension());
 
         $imageMarkdown = '![alt text](/path/to/image.jpg)';
 
         $html = (new CommonMarkConverter([
             'lazy_image' => ['data_attribute' => 'src']
-        ], $environment))->convertToHtml($imageMarkdown);
+        ], $this->environment))->convertToHtml($imageMarkdown);
 
         $this->assertStringContainsString('data-src="/path/to/image.jpg"', $html);
     }
 
     public function testThatTheClassCanBeAdded()
     {
-        $environment = Environment::createCommonMarkEnvironment();
-
-        $environment->addExtension(new LazyImageExtension());
 
         $imageMarkdown = '![alt text](/path/to/image.jpg)';
 
         $html = (new CommonMarkConverter([
             'lazy_image' => ['html_class' => 'lazy-loading-class']
-        ], $environment))->convertToHtml($imageMarkdown);
+        ], $this->environment))->convertToHtml($imageMarkdown);
 
         $this->assertStringContainsString('class="lazy-loading-class"', $html);
     }
 
     public function testLozadLibraryConfigurationAsExample()
     {
-        $environment = Environment::createCommonMarkEnvironment();
-
-        $environment->addExtension(new LazyImageExtension());
 
         $imageMarkdown = '![alt text](/path/to/image.jpg)';
 
@@ -92,7 +81,7 @@ class LazyImageExtensionTest extends TestCase {
                 'html_class' => 'lozad',
                 'data_attribute' => 'src',
             ]
-        ], $environment))->convertToHtml($imageMarkdown);
+        ], $this->environment))->convertToHtml($imageMarkdown);
 
         $this->assertStringContainsString('src="" alt="alt text" loading="lazy" data-src="/path/to/image.jpg" class="lozad"', $html);
     }
@@ -101,7 +90,8 @@ class LazyImageExtensionTest extends TestCase {
      * @param ConfigurableEnvironmentInterface $environment
      * @return array
      */
-    private function getImageRenderers(ConfigurableEnvironmentInterface $environment) {
+    private function getImageRenderers(ConfigurableEnvironmentInterface $environment)
+    {
         return iterator_to_array($environment->getInlineRenderersForClass('League\CommonMark\Inline\Element\Image'));
     }
 }

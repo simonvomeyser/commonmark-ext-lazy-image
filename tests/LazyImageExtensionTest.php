@@ -21,12 +21,12 @@ class LazyImageExtensionTest extends TestCase
         $this->environment->addExtension(new LazyImageExtension());
     }
 
-    public function testThatTheRendererIsAdded()
+    public function testTheRendererIsAdded()
     {
         $this->assertCount(2, $this->getImageRenderers($this->environment));
     }
 
-    public function testThatOnlyTheLazyAttributeIsAddedInDefaultConfig()
+    public function testOnlyTheLazyAttributeIsAddedInDefaultConfig()
     {
         $converter = new CommonMarkConverter([], $this->environment);
 
@@ -35,7 +35,7 @@ class LazyImageExtensionTest extends TestCase
         $this->assertStringContainsString('<img src="/path/to/image.jpg" alt="alt text" loading="lazy" />', $html);
     }
 
-    public function testThatTheSrcCanBeStripped()
+    public function testTheSrcCanBeStripped()
     {
         $converter = new CommonMarkConverter([
             'lazy_image' => ['strip_src' => true]
@@ -46,7 +46,7 @@ class LazyImageExtensionTest extends TestCase
         $this->assertStringContainsString('<img src="" alt="alt text" loading="lazy" />', $html);
     }
 
-    public function testThatTheDataSrcBeDefined()
+    public function testTheDataSrcBeDefined()
     {
 
         $imageMarkdown = '![alt text](/path/to/image.jpg)';
@@ -58,7 +58,7 @@ class LazyImageExtensionTest extends TestCase
         $this->assertStringContainsString('data-src="/path/to/image.jpg"', $html);
     }
 
-    public function testThatTheClassCanBeAdded()
+    public function testTheClassCanBeAdded()
     {
 
         $imageMarkdown = '![alt text](/path/to/image.jpg)';

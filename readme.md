@@ -33,7 +33,9 @@ This creates the following HTML
 
 By default, only the `loading="lazy"` attribute is added, which should hopefully will be sufficient [in the future](https://web.dev/native-lazy-loading/).
 
-You have the options to integrate with various lazy loading libraries by the following options, shown here with the example of the [lozad library](https://github.com/ApoorvSaxena/lozad.js)
+You can use the follwoing options to integrate with various lazy loading libraries.
+
+Here is an example how to use this package with the [lozad library](https://github.com/ApoorvSaxena/lozad.js):
 
 ```php
 //...

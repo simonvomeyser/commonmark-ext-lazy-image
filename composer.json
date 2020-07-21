@@ -26,5 +26,8 @@
         "psr-4": {
             "SimonVomEyser\\CommonMarkExtension\\" : "src/"
         }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit"
     }
 }

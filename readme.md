@@ -1,6 +1,6 @@
 # Extension to render lazy images in markdown
 
-[![Build Status](https://travis-ci.org/simonvomeyser/commonmark-ext-lazy-image.svg?branch=master)](https://travis-ci.org/simonvomeyser/commonmark-ext-lazy-image)
+![Tests](https://github.com/simonvomeyser/commonmark-ext-lazy-image/workflows/Tests/badge.svg)
 
 This adds support for lazy images to the [league/commonmark](https://github.com/thephpleague/commonmark) package.
 

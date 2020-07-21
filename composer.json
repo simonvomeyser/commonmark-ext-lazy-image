@@ -15,7 +15,6 @@
             "email": "simon.vom.eyser@gmail.com"
         }
     ],
-    "minimum-stability": "dev",
     "require": {
         "php" : "^7.1",
         "league/commonmark": "^1.0"

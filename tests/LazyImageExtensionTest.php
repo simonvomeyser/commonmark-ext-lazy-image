@@ -6,9 +6,6 @@ use League\CommonMark\Environment;
 use PHPUnit\Framework\TestCase;
 use SimonVomEyser\CommonMarkExtension\LazyImageExtension;
 
-/**
- * Class LazyImageExtensionTest
- */
 class LazyImageExtensionTest extends TestCase
 {
 

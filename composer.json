@@ -1,34 +1,34 @@
 {
-    "name": "simonvomeyser/commonmark-ext-lazy-image",
-    "license": "MIT",
-    "type": "commonmark-extension",
-    "description": "Adds support for lazy images to the phpleague/commonmark markdown parser package",
-    "keywords": [
-        "markdown",
-        "commonmark",
-        "extension",
-        "lazy",
-        "image"
-    ],
-    "authors": [
-        {
-            "name": "Simon vom Eyser",
-            "email": "simon.vom.eyser@gmail.com"
-        }
-    ],
-    "require": {
-        "php" : "^7.1",
-        "league/commonmark": "^1.0"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "^9"
-    },
-    "autoload": {
-        "psr-4": {
-            "SimonVomEyser\\CommonMarkExtension\\" : "src/"
-        }
-    },
-    "scripts": {
-        "test": "vendor/bin/phpunit"
+  "name": "simonvomeyser/commonmark-ext-lazy-image",
+  "license": "MIT",
+  "type": "commonmark-extension",
+  "description": "Adds support for lazy images to the phpleague/commonmark markdown parser package",
+  "keywords": [
+    "markdown",
+    "commonmark",
+    "extension",
+    "lazy",
+    "image"
+  ],
+  "authors": [
+    {
+      "name": "Simon vom Eyser",
+      "email": "simon.vom.eyser@gmail.com"
     }
+  ],
+  "require": {
+    "php": "^7.1 || ^8.0",
+    "league/commonmark": "^1.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^9.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "SimonVomEyser\\CommonMarkExtension\\": "src/"
+    }
+  },
+  "scripts": {
+    "test": "vendor/bin/phpunit"
+  }
 }

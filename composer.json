@@ -1,5 +1,5 @@
 {
-  "name": "simonvomeyser/commonmark-ext-lazy-image",
+  "name": "RJFares/commonmark-ext-lazy-image",
   "license": "MIT",
   "type": "commonmark-extension",
   "description": "Adds support for lazy images to the phpleague/commonmark markdown parser package",

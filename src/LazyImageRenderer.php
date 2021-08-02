@@ -2,71 +2,67 @@
 
 namespace SimonVomEyser\CommonMarkExtension;
 
-use League\CommonMark\ConfigurableEnvironmentInterface;
-use League\CommonMark\HtmlElement;
-use League\CommonMark\Inline\Renderer\ImageRenderer;
-use League\CommonMark\Util\ConfigurationAwareInterface;
-use League\CommonMark\ElementRendererInterface;
-use League\CommonMark\Util\ConfigurationInterface;
-use League\CommonMark\Inline\Element\AbstractInline;
-use League\CommonMark\Inline\Renderer\InlineRendererInterface;
+use League\Config\ConfigurationInterface;
+use League\CommonMark\Extension\CommonMark\Renderer\Inline\ImageRenderer;
+use League\CommonMark\Node\Node;
+use League\CommonMark\Renderer\ChildNodeRendererInterface;
+use League\CommonMark\Renderer\NodeRendererInterface;
+use League\CommonMark\Util\HtmlElement;
 
-class LazyImageRenderer implements InlineRendererInterface, ConfigurationAwareInterface
+class LazyImageRenderer implements NodeRendererInterface
 {
     /** @var ConfigurationInterface */
-    protected $config;
+    protected ConfigurationInterface $config;
 
     /** @var ImageRenderer */
-    protected $baseImageRenderer;
-
-    /** @var ConfigurableEnvironmentInterface */
-    private $environment;
+    protected ImageRenderer $baseImageRenderer;
 
     /**
-     * @param ConfigurableEnvironmentInterface $environment
+     * @param ConfigurationInterface $config
      * @param ImageRenderer $baseImageRenderer
      */
-    public function __construct(ConfigurableEnvironmentInterface $environment, ImageRenderer $baseImageRenderer)
+    public function __construct(ConfigurationInterface $config, ImageRenderer $baseImageRenderer)
     {
+        $this->config = $config;
         $this->baseImageRenderer = $baseImageRenderer;
-        $this->environment = $environment;
     }
 
     /**
-     * @param AbstractInline $inline
-     * @param ElementRendererInterface $htmlRenderer
+     * @param Node $node
+     * @param ChildNodeRendererInterface $childRenderer
      *
      * @return HtmlElement
      */
-    public function render(AbstractInline $inline, ElementRendererInterface $htmlRenderer)
+    public function render(Node $node, ChildNodeRendererInterface $childRenderer): HtmlElement
     {
-
-        $stripSrc = $this->environment->getConfig('lazy_image/strip_src', false);
-        $dataAttribute = $this->environment->getConfig('lazy_image/data_attribute', '');
-        $htmlClass = $this->environment->getConfig('lazy_image/html_class', '');
+        $stripSrc = $this->config->get('lazy_image/strip_src');
+        $dataAttribute = $this->config->get('lazy_image/data_attribute');
+        $htmlClass = $this->config->get('lazy_image/html_class');
 
         $this->baseImageRenderer->setConfiguration($this->config);
-        $baseImage = $this->baseImageRenderer->render($inline, $htmlRenderer);
+        $htmlElement = $this->baseImageRenderer->render($node, $childRenderer);
 
-        $baseImage->setAttribute('loading', 'lazy');
+        $htmlElement->setAttribute('loading', 'lazy');
 
         if ($dataAttribute) {
-            $baseImage->setAttribute("data-$dataAttribute", $baseImage->getAttribute('src'));
+            $htmlElement->setAttribute("data-$dataAttribute", $htmlElement->getAttribute('src'));
         }
 
         if ($htmlClass) {
-            $baseImage->setAttribute('class', $htmlClass);
+            // append the class to existing classes
+            $attr = $htmlElement->getAttribute('class');
+            if (!empty($attr))
+            {
+                $attr .= " ";
+            }
+            $attr .= $htmlClass;
+            $htmlElement->setAttribute('class', $attr);
         }
 
         if ($stripSrc) {
-            $baseImage->setAttribute('src', '');
+            $htmlElement->setAttribute('src', '');
         }
 
-        return $baseImage;
-    }
-
-    public function setConfiguration(ConfigurationInterface $configuration)
-    {
-        $this->config = $configuration;
+        return $htmlElement;
     }
 }

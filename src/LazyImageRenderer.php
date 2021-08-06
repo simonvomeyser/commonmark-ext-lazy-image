@@ -2,12 +2,11 @@
 
 namespace SimonVomEyser\CommonMarkExtension;
 
-use League\Config\ConfigurationInterface;
 use League\CommonMark\Extension\CommonMark\Renderer\Inline\ImageRenderer;
 use League\CommonMark\Node\Node;
 use League\CommonMark\Renderer\ChildNodeRendererInterface;
 use League\CommonMark\Renderer\NodeRendererInterface;
-use League\CommonMark\Util\HtmlElement;
+use League\Config\ConfigurationInterface;
 
 class LazyImageRenderer implements NodeRendererInterface
 {
@@ -18,8 +17,8 @@ class LazyImageRenderer implements NodeRendererInterface
     protected ImageRenderer $baseImageRenderer;
 
     /**
-     * @param ConfigurationInterface $config
-     * @param ImageRenderer $baseImageRenderer
+     * @param  ConfigurationInterface  $config
+     * @param  ImageRenderer  $baseImageRenderer
      */
     public function __construct(ConfigurationInterface $config, ImageRenderer $baseImageRenderer)
     {
@@ -28,12 +27,12 @@ class LazyImageRenderer implements NodeRendererInterface
     }
 
     /**
-     * @param Node $node
-     * @param ChildNodeRendererInterface $childRenderer
+     * @param  Node  $node
+     * @param  ChildNodeRendererInterface  $childRenderer
      *
-     * @return HtmlElement
+     * @return string|\Stringable
      */
-    public function render(Node $node, ChildNodeRendererInterface $childRenderer): HtmlElement
+    public function render(Node $node, ChildNodeRendererInterface $childRenderer)
     {
         $stripSrc = $this->config->get('lazy_image/strip_src');
         $dataAttribute = $this->config->get('lazy_image/data_attribute');
@@ -51,8 +50,7 @@ class LazyImageRenderer implements NodeRendererInterface
         if ($htmlClass) {
             // append the class to existing classes
             $attr = $htmlElement->getAttribute('class');
-            if (!empty($attr))
-            {
+            if (! empty($attr)) {
                 $attr .= " ";
             }
             $attr .= $htmlClass;

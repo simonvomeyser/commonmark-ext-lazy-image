@@ -7,6 +7,7 @@ use League\CommonMark\Extension\CommonMark\Renderer\Inline\ImageRenderer;
 use League\CommonMark\Extension\ConfigurableExtensionInterface;
 use League\Config\ConfigurationBuilderInterface;
 use Nette\Schema\Expect;
+use League\CommonMark\Extension\CommonMark\Node\Inline\Image;
 
 class LazyImageExtension implements ConfigurableExtensionInterface
 {
@@ -22,6 +23,6 @@ class LazyImageExtension implements ConfigurableExtensionInterface
     public function register(EnvironmentBuilderInterface $environment): void
     {
         $lazyImageRenderer = new LazyImageRenderer($environment->getConfiguration(), new ImageRenderer());
-        $environment->addRenderer('League\CommonMark\Extension\CommonMark\Node\Inline\Image', $lazyImageRenderer, 10);
+        $environment->addRenderer(Image::class, $lazyImageRenderer, 10);
     }
 }

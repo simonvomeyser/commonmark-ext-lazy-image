@@ -3,6 +3,7 @@
 ![Tests](https://github.com/simonvomeyser/commonmark-ext-lazy-image/workflows/Tests/badge.svg)
 
 This adds support for lazy images to the [league/commonmark](https://github.com/thephpleague/commonmark) package.
+This version is compatible with League\CommonMark ^2.0.
 
 ## Install
 
@@ -13,13 +14,15 @@ composer require simonvomeyser/commonmark-ext-lazy-image
 ## Example
 
 ``` php
-use League\CommonMark\Environment;
+use League\CommonMark\Environment\Environment;
+use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
 use SimonVomEyser\CommonMarkExtension\LazyImageExtension;
 
-$this->environment = Environment::createCommonMarkEnvironment();
-$this->environment->addExtension(new LazyImageExtension());
+$environment = new Environment([]);
+$environment->addExtension(new CommonMarkCoreExtension())
+            ->addExtension(new LazyImageExtension());
 
-$converter = new CommonMarkConverter([], $this->environment);
+$converter = new MarkdownConverter($environment);
 $html = $converter->convertToHtml('![alt text](/path/to/image.jpg)');
 ```
 
@@ -39,8 +42,11 @@ Here is an example how to use this package with the [lozad library](https://gith
 
 ```php
 //...
+$environment = new Environment([]);
+$environment->addExtension(new CommonMarkCoreExtension())
+            ->addExtension(new LazyImageExtension());
 
-$converter = new CommonMarkConverter([
+$converter = new MarkdownConverter([
   'lazy_image' => [
       'strip_src' => true, // remove the "src" to add it later via js, optional
       'html_class' => 'lozad', // the class that should be added, optional

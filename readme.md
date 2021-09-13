@@ -2,14 +2,26 @@
 
 ![Tests](https://github.com/simonvomeyser/commonmark-ext-lazy-image/workflows/Tests/badge.svg)
 
-This adds support for lazy images to the [league/commonmark](https://github.com/thephpleague/commonmark) package.
-This version is compatible with League\CommonMark ^2.0.
+This adds support for lazy images to the [league/commonmark](https://github.com/thephpleague/commonmark) package version `^2.0`.
 
 ## Install
 
 ``` bash
 composer require simonvomeyser/commonmark-ext-lazy-image
 ```
+
+<details>
+  <summary>Usage with Version `^1.0` of League\CommonMark </summary>
+  
+⚠️  The current version is only compatible with League\CommonMark `^2.0`, for `^1.0` install the latest version compatible version of this package like so:
+
+``` bash
+composer require simonvomeyser/commonmark-ext-lazy-image "^v1.2.0"
+```
+
+You can find the old documentation [here](https://github.com/simonvomeyser/commonmark-ext-lazy-image/tree/40fcb3ec18b1c84e21a0b0b635ad021f8ec933bd).
+</details>
+
 
 ## Example
 

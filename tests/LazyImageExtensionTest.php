@@ -1,94 +1,94 @@
 <?php
 
-use League\CommonMark\CommonMarkConverter;
-use League\CommonMark\ConfigurableEnvironmentInterface;
-use League\CommonMark\Environment;
+use League\CommonMark\Environment\Environment;
+use League\CommonMark\Environment\EnvironmentBuilderInterface;
+use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
+use League\CommonMark\Extension\CommonMark\Node\Inline\Image;
+use League\CommonMark\MarkdownConverter;
 use PHPUnit\Framework\TestCase;
 use SimonVomEyser\CommonMarkExtension\LazyImageExtension;
 
 class LazyImageExtensionTest extends TestCase
 {
-
-    protected $environment;
-
-    protected function setUp(): void
+    protected function getConverter(array $config): MarkdownConverter
     {
-        parent::setUp();
-        $this->environment = Environment::createCommonMarkEnvironment();
-        $this->environment->addExtension(new LazyImageExtension());
+        $environment = new Environment($config);
+        $environment->addExtension(new CommonMarkCoreExtension())->addExtension(new LazyImageExtension());
+
+        return new MarkdownConverter($environment);
     }
 
-    public function testTheRendererIsAdded()
+    private function getImageRenderers(EnvironmentBuilderInterface $environment): array
     {
-        $this->assertCount(2, $this->getImageRenderers($this->environment));
+        return [...$this->getConverter([])->getEnvironment()->getRenderersForClass(Image::class)];
     }
 
-    public function testOnlyTheLazyAttributeIsAddedInDefaultConfig()
+    public function testLozadLibraryConfigurationAsExample(): void
     {
-        $converter = new CommonMarkConverter([], $this->environment);
-
-        $html = $converter->convertToHtml('![alt text](/path/to/image.jpg)');
-
-        $this->assertStringContainsString('<img src="/path/to/image.jpg" alt="alt text" loading="lazy" />', $html);
-    }
-
-    public function testTheSrcCanBeStripped()
-    {
-        $converter = new CommonMarkConverter([
-            'lazy_image' => ['strip_src' => true]
-        ], $this->environment);
-
-        $html = $converter->convertToHtml('![alt text](/path/to/image.jpg)');
-
-        $this->assertStringContainsString('<img src="" alt="alt text" loading="lazy" />', $html);
-    }
-
-    public function testTheDataSrcBeDefined()
-    {
-
-        $imageMarkdown = '![alt text](/path/to/image.jpg)';
-
-        $html = (new CommonMarkConverter([
-            'lazy_image' => ['data_attribute' => 'src']
-        ], $this->environment))->convertToHtml($imageMarkdown);
-
-        $this->assertStringContainsString('data-src="/path/to/image.jpg"', $html);
-    }
-
-    public function testTheClassCanBeAdded()
-    {
-
-        $imageMarkdown = '![alt text](/path/to/image.jpg)';
-
-        $html = (new CommonMarkConverter([
-            'lazy_image' => ['html_class' => 'lazy-loading-class']
-        ], $this->environment))->convertToHtml($imageMarkdown);
-
-        $this->assertStringContainsString('class="lazy-loading-class"', $html);
-    }
-
-    public function testLozadLibraryConfigurationAsExample()
-    {
-
-        $imageMarkdown = '![alt text](/path/to/image.jpg)';
-
-        $html = (new CommonMarkConverter([
+        $config = [
             'lazy_image' => [
                 'strip_src' => true,
                 'html_class' => 'lozad',
                 'data_attribute' => 'src',
             ]
-        ], $this->environment))->convertToHtml($imageMarkdown);
+        ];
+        $converter = $this->getConverter($config);
 
-        $this->assertStringContainsString('src="" alt="alt text" loading="lazy" data-src="/path/to/image.jpg" class="lozad"', $html);
+        $imageMarkdown = '![alt text](/path/to/image.jpg)';
+        $html = $converter->convertToHtml($imageMarkdown);
+
+        $this->assertStringContainsString('src="" alt="alt text" loading="lazy" data-src="/path/to/image.jpg" class="lozad"',
+            $html);
     }
 
-    /**
-     * @param ConfigurableEnvironmentInterface $environment
-     * @return array
-     */
-    private function getImageRenderers(ConfigurableEnvironmentInterface $environment)
+    public function testOnlyTheLazyAttributeIsAddedInDefaultConfig(): void
     {
-        return iterator_to_array($environment->getInlineRenderersForClass('League\CommonMark\Inline\Element\Image'));
+        $converter = $this->getConverter([]);
+
+        $html = $converter->convertToHtml('![alt text](/path/to/image.jpg)');
+        $this->assertStringContainsString('<img src="/path/to/image.jpg" alt="alt text" loading="lazy" />', $html);
+    }
+
+    public function testTheClassCanBeAdded(): void
+    {
+        $config = [
+            'lazy_image' => ['html_class' => 'lazy-loading-class']
+        ];
+        $converter = $this->getConverter($config);
+
+        $imageMarkdown = '![alt text](/path/to/image.jpg)';
+        $html = $converter->convertToHtml($imageMarkdown);
+        $this->assertStringContainsString('class="lazy-loading-class"', $html);
+    }
+
+    public function testTheDataSrcBeDefined(): void
+    {
+        $config = [
+            'lazy_image' => ['data_attribute' => 'src']
+        ];
+        $converter = $this->getConverter($config);
+
+        $imageMarkdown = '![alt text](/path/to/image.jpg)';
+        $html = $converter->convertToHtml($imageMarkdown);
+        $this->assertStringContainsString('data-src="/path/to/image.jpg"', $html);
+    }
+
+    public function testTheRendererIsAdded(): void
+    {
+        $environment = new Environment([]);
+        $environment->addExtension(new CommonMarkCoreExtension())->addExtension(new LazyImageExtension());
+
+        $this->assertCount(2, $this->getImageRenderers($environment));
+    }
+
+    public function testTheSrcCanBeStripped(): void
+    {
+        $config = [
+            'lazy_image' => ['strip_src' => true]
+        ];
+        $converter = $this->getConverter($config);
+
+        $html = $converter->convertToHtml('![alt text](/path/to/image.jpg)');
+        $this->assertStringContainsString('<img src="" alt="alt text" loading="lazy" />', $html);
     }
 }

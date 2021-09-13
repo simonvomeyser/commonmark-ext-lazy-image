@@ -11,9 +11,11 @@ composer require simonvomeyser/commonmark-ext-lazy-image
 ```
 
 <details>
-  <summary>⚠️ When you are using Version ^1.0 of League\CommonMark </summary>
+<summary>⚠️ When you are using Version 1.0 of league\commonmark </summary>
   
-  The current version of this pacakge is only compatible with League\CommonMark `^2.0`, for `^1.0` compatibility install the latest `1.0` version of this package like so:
+<br>
+<br>
+The current version of this pacakge is only compatible with `League\CommonMark 2.0`, for `1.0` compatibility install the latest `1.0` version of this package like so:
 
 ``` bash
 composer require simonvomeyser/commonmark-ext-lazy-image "^v1.2.0"

@@ -55,17 +55,19 @@ While this should hopefully be sufficient [in the future](https://web.dev/native
 Here is an example how to use this package with the [lozad library](https://github.com/ApoorvSaxena/lozad.js):
 
 ```php
-//...
 $environment = new Environment([
-  'lazy_image' => [
-      'strip_src' => true, // remove the "src" to add it later via js, optional
-      'html_class' => 'lozad', // the class that should be added, optional
-      'data_attribute' => 'src', // how the data attribute is named that provides the source to get picked up by js, optional
-  ]);
+    // ... other config
+    'lazy_image' => [
+        'strip_src' => true, // remove the "src" to add it later via js, optional
+        'html_class' => 'lozad', // the class that should be added, optional
+        'data_attribute' => 'src', // how the data attribute is named that provides the source to get picked up by js, optional
+    ]
+]);
 $environment->addExtension(new CommonMarkCoreExtension())
-            ->addExtension(new LazyImageExtension());
+    ->addExtension(new LazyImageExtension());
 
-$converter = new MarkdownConverter($environment)
+$converter = new MarkdownConverter($environment);
+
 $html = $converter->convertToHtml('![alt text](/path/to/image.jpg)');
 ```
 

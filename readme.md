@@ -27,7 +27,8 @@ You can find the old documentation [here](https://github.com/simonvomeyser/commo
 
 ## Example
 
-``` php
+```php
+
 use League\CommonMark\Environment\Environment;
 use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
 use SimonVomEyser\CommonMarkExtension\LazyImageExtension;
@@ -37,7 +38,7 @@ $environment->addExtension(new CommonMarkCoreExtension())
             ->addExtension(new LazyImageExtension());
 
 $converter = new MarkdownConverter($environment);
-$html = $converter->convertToHtml('![alt text](/path/to/image.jpg)');
+$html = $converter->convert('![alt text](/path/to/image.jpg)');
 ```
 
 This creates the following HTML
@@ -68,7 +69,7 @@ $environment->addExtension(new CommonMarkCoreExtension())
 
 $converter = new MarkdownConverter($environment);
 
-$html = $converter->convertToHtml('![alt text](/path/to/image.jpg)');
+$html = $converter->convert('![alt text](/path/to/image.jpg)');
 ```
 
 

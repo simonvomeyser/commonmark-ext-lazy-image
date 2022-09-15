@@ -46,7 +46,7 @@ This creates the following HTML
 <img src="/path/to/image.jpg" alt="alt text" loading="lazy" />
 ```
 
-## Options
+## Options/Configuration
 
 By default, only the `loading="lazy"` attribute is added
 
@@ -56,17 +56,16 @@ Here is an example how to use this package with the [lozad library](https://gith
 
 ```php
 //...
-$environment = new Environment([]);
-$environment->addExtension(new CommonMarkCoreExtension())
-            ->addExtension(new LazyImageExtension());
-
-$converter = new MarkdownConverter([
+$environment = new Environment([
   'lazy_image' => [
       'strip_src' => true, // remove the "src" to add it later via js, optional
       'html_class' => 'lozad', // the class that should be added, optional
       'data_attribute' => 'src', // how the data attribute is named that provides the source to get picked up by js, optional
-  ]
-], $environment)
+  ]);
+$environment->addExtension(new CommonMarkCoreExtension())
+            ->addExtension(new LazyImageExtension());
+
+$converter = new MarkdownConverter($environment)
 $html = $converter->convertToHtml('![alt text](/path/to/image.jpg)');
 ```
 
